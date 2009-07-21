@@ -8,11 +8,13 @@ use 5.0100;
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Element::Activity;
 
+our $VERSION = $Business::UPS::Tracking::VERISON;
+
 =encoding utf8
 
 =head1 NAME
 
-Business::UPS::Tracking::Element::Address - A small freight package activity
+Business::UPS::Tracking::Element::Activity - A small freight package activity
   
 =head1 DESCRIPTION
 
@@ -62,49 +64,49 @@ has 'xml' => (
 
 has 'ActivityLocationAddress' => (
     is      => 'ro',
-    isa     => 'Business::UPS::Tracking::Element::Address',
+    isa     => 'Maybe[Business::UPS::Tracking::Element::Address]',
     lazy    => 1,
     builder => '_build_ActivityLocationAddress',
 );
 has 'ActivityLocationCode' => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => 'Maybe[Str]',
     lazy    => 1,
     builder => '_build_ActivityLocationCode',
 );
 has 'ActivityLocationDescription' => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => 'Maybe[Str]',
     lazy    => 1,
     builder => '_build_ActivityLocationDescription',
 );
 has 'SignedForByName' => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => 'Maybe[Str]',
     lazy    => 1,
     builder => '_build_SignedForByName',
 );
 has 'StatusCode' => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => 'Maybe[Str]',
     lazy    => 1,
     builder => '_build_StatusCode',
 );
 has 'StatusTypeCode' => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => 'Maybe[Str]',
     lazy    => 1,
     builder => '_build_StatusTypeCode',
 );
 has 'StatusTypeDescription' => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => 'Maybe[Str]',
     lazy    => 1,
     builder => '_build_StatusTypeDescription',
 );
 has 'DateTime' => (
     is      => 'ro',
-    isa     => 'Date',
+    isa     => 'Maybe[Date]',
     lazy    => 1,
     builder => '_build_DateTime',
 );

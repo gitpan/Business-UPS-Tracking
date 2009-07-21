@@ -1,5 +1,5 @@
 ---
-abstract: 'Interface to UPS Tracking webservice'
+abstract: 'Interface to the UPS tracking webservice'
 author:
   - 'Maroš Kollár'
 build_requires:
@@ -20,6 +20,7 @@ no_index:
     - t
     - xt
 requires:
+  Crypt::SSLeay: 0
   DateTime: 0
   Exception::Class: 0
   LWP::UserAgent: 0
@@ -30,4 +31,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/maros/Business-UPS-Tracking.git
-version: 1.000
+version: 1.010

@@ -8,6 +8,8 @@ use 5.0100;
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Element::Activity;
 
+our $VERSION = $Business::UPS::Tracking::VERISON;
+
 =encoding utf8
 
 =head1 NAME
@@ -27,21 +29,19 @@ Original L<XML::LibXML::Node> node.
 
 =head2 Activity 
 
-Arrayref of C<Business::UPS::Tracking::Element::Activity> objects
+Arrayref of L<Business::UPS::Tracking::Element::Activity> objects
 ordered by activity date and time. Check the first element in the list for the
-most recent status.
-
-Arrayref of 
+most recent status. 
 
 =head2 RescheduledDelivery
 
-Date and time of rescheduled delivery attempt. Retuens a L<DateTime> object.
+Date and time of rescheduled delivery attempt. Returns a L<DateTime> object.
 
-Returns a C<Business::UPS::Tracking::Element::Address> object.
+Returns a L<Business::UPS::Tracking::Element::Address> object.
 
 =head2 ReturnToAddress
 
-Returns a C<Business::UPS::Tracking::Element::Address> object.
+Returns a L<Business::UPS::Tracking::Element::Address> object.
 
 =head2 SignatureRequired
 
@@ -50,7 +50,7 @@ required).
 
 =head2 PackageWeight
 
-Package weight. Returns a C<Business::UPS::Tracking::Element::Weight> object.
+Package weight. Returns a L<Business::UPS::Tracking::Element::Weight> object.
 
 =head2 TrackingNumber
 
@@ -58,7 +58,7 @@ UPS tracking number.
 
 =head2 RerouteAddress
 
-Returns a C<Business::UPS::Tracking::Element::Address> object.
+Returns a L<Business::UPS::Tracking::Element::Address> object.
 
 =head1 METHODS
 
@@ -75,13 +75,13 @@ has 'xml' => (
 );
 has 'RerouteAddress' => (
     is    => 'ro',
-    isa   => 'Business::UPS::Tracking::Address',
+    isa   => 'Maybe[Business::UPS::Tracking::Address]',
     lazy  => 1,
     builder => '_build_RerouteAddress',
 );
 has 'ReturnToAddress' => (
     is    => 'ro',
-    isa   => 'Business::UPS::Tracking::Address',
+    isa   => 'Maybe[Business::UPS::Tracking::Address]',
     lazy  => 1,
     builder => '_build_ReturnToAddress',
 );
@@ -105,7 +105,7 @@ has 'SignatureRequired' => (
 #);
 has 'PackageWeight' => (
     is    => 'ro',
-    isa   => 'Business::UPS::Tracking::Element::Weight',
+    isa   => 'Maybe[Business::UPS::Tracking::Element::Weight]',
     lazy  => 1,
     builder => '_build_PackageWeight',
 );
@@ -117,25 +117,25 @@ has 'ReferenceNumber' => (
 );
 has 'ProductTypeCode' => (
     is    => 'ro',
-    isa   => 'Str',
+    isa   => 'Maybe[Str]',
     lazy  => 1,
     builder => '_build_ProductTypeCode',
 );
 has 'ProductTypeDescription' => (
     is    => 'ro',
-    isa   => 'Str',
+    isa   => 'Maybe[Str]',
     lazy  => 1,
     builder => '_build_ProductTypeDescription',
 );
 has 'TrackingNumber' => (
     is  => 'ro',
-    isa => 'TrackingNumber',
+    isa => 'Maybe[TrackingNumber]',
     lazy  => 1,
     builder => '_build_TrackingNumber',
 );
 has 'RescheduledDelivery' => (
     is      => 'ro',
-    isa     => 'Date',
+    isa     => 'Maybe[Date]',
     lazy    => 1,
     builder => '_build_RescheduledDelivery',
 );
@@ -161,18 +161,18 @@ sub _build_PackageWeight {
         'PackageWeight' );
 }
 
-sub _build_Message {
-    my ($self) = @_;
-
-    my @nodes = $self->xml->findnodes('Message');
-    my $return = [];
-    foreach my $node (@nodes) {
-        push @$return,Business::UPS::Tracking::Element::Message->new(
-            xml => $node,
-        );
-    }
-    return $return;
-}
+#sub _build_Message {
+#    my ($self) = @_;
+#
+#    my @nodes = $self->xml->findnodes('Message');
+#    my $return = [];
+#    foreach my $node (@nodes) {
+#        push @$return,Business::UPS::Tracking::Element::Message->new(
+#            xml => $node,
+#        );
+#    }
+#    return $return;
+#}
 
 
 
