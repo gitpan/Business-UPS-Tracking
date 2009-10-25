@@ -1,9 +1,14 @@
-# ================================================================
+# ============================================================================
 package Business::UPS::Tracking::Element::ReferenceNumber;
-# ================================================================
+# ============================================================================
 use utf8;
-use Moose;
 use 5.0100;
+
+use metaclass (
+    metaclass   => "Moose::Meta::Class",
+    error_class => "Business::UPS::Tracking::Exception",
+);
+use Moose;
 
 use Business::UPS::Tracking::Utils;
 
@@ -90,8 +95,6 @@ Reference number as supplied by the customer
 
 =cut
 
-use overload '""' => \&_print, fallback => 1;
-
 has 'xml' => (
     is       => 'rw',
     isa      => 'XML::LibXML::Node',
@@ -141,12 +144,18 @@ sub _build_referencenumber {
     return;
 }
 
-sub _print {
+=head1 METHODS
+
+=head2 serialize 
+
+Returns the serialized object content
+
+=cut
+
+sub serialize {
     my ($self) = @_;
     return $self->Value;
 }
-
-=head1 METHODS
 
 =head2 Description
 

@@ -1,9 +1,14 @@
-# ================================================================
+# ============================================================================
 package Business::UPS::Tracking::Request;
-# ================================================================
+# ============================================================================
 use utf8;
-use Moose;
 use 5.0100;
+
+use metaclass (
+    metaclass   => "Moose::Meta::Class",
+    error_class => "Business::UPS::Tracking::Exception",
+);
+use Moose;
 
 use DateTime;
 use XML::LibXML;
@@ -53,7 +58,11 @@ L<Business::UPS::Tracking> object.
 
 =head2 TrackingNumber
 
-Unique UPS tracking number.
+UPS tracking number. This number has to start with '1Z' and have a valid
+checksum. You can globally turn off this check by setting
+C<$Business::UPS::Tracking::CHECKSUM = 0> (which is not recommended, 
+but eg. needed for testing since test shipments at the UPS server do not
+have a valid checksum)
 
 =head2 ReferenceNumber
 
@@ -118,54 +127,65 @@ has 'tracking' => (
 );
 has 'TrackingNumber' => (
     is  => 'rw',
-    isa => 'TrackingNumber'
+    isa => 'TrackingNumber',
+    documentation   => 'Shipment tracking number',
 );
 has 'ReferenceNumber' => (
     is  => 'rw',
-    isa => 'Str'
+    isa => 'Str',
+    documentation   => 'Shipment reference number',
 );
 has 'ShipperNumber' => (
     is  => 'rw',
-    isa => 'Str'
+    isa => 'Str',
+    documentation   => 'Shipper UPS customernumber',
 );
 has 'DestinationPostalCode' => (
     is  => 'rw',
-    isa => 'Str'
+    isa => 'Str',
+    documentation   => 'Shipment destination postal code',
 );
 has 'DestinationCountryCode' => (
     is  => 'rw',
-    isa => 'CountryCode'
+    isa => 'CountryCode',
+    documentation   => 'Shipment destination country code',
 );
 has 'OriginPostalCode' => (
     is  => 'rw',
-    isa => 'Str'
+    isa => 'Str',
+    documentation   => 'Shipment origin postal code',
 );
 has 'OriginCountryCode' => (
     is  => 'rw',
-    isa => 'CountryCode'
+    isa => 'CountryCode',
+    documentation   => 'Shipment origin country code',
 );
 has 'CustomerContext' => (
     is  => 'rw',
-    isa => 'Str'
+    isa => 'Str',
 );
 has 'ShipmentIdentificationNumber' => (
     is  => 'rw',
-    isa => 'Str'
+    isa => 'Str',
+    documentation   => 'Shipment identification number',
 );
 has 'PickupDateRangeBegin' => (
     is     => 'rw',
     isa    => 'DateStr',
     coerce => 1,
+    documentation   => 'Shipment pickup date range begin',
 );
 has 'PickupDateRangeEnd' => (
     is     => 'rw',
     isa    => 'DateStr',
     coerce => 1,
+    documentation   => 'Shipment pickup date range end',
 );
 has 'ShmipmentType' => (
     is      => 'rw',
     isa     => enum( [ '01', '02' ] ),
     default => '01',
+    documentation   => 'Shipment type ["01" - Small shipment (Default), "02" - Freight ]',
 );
 has 'IncludeFreight' => (
     is      => 'rw',

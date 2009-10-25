@@ -1,9 +1,14 @@
-# ================================================================
+# ============================================================================
 package Business::UPS::Tracking::Shipment::SmallPackage;
-# ================================================================
+# ============================================================================
 use utf8;
-use Moose;
 use 5.0100;
+
+use metaclass (
+    metaclass   => "Moose::Meta::Class",
+    error_class => "Business::UPS::Tracking::Exception",
+);
+use Moose;
 
 extends 'Business::UPS::Tracking::Shipment';
 
@@ -37,8 +42,9 @@ List of packages (L<Business::UPS::Tracking::Element::Package>)
 has 'Package' => (
     is      => 'ro',
     isa     => 'ArrayRef[Business::UPS::Tracking::Element::Package]',
-    lazy    => 1,
-    builder => '_build_Package',
+    traits  => ['Serializable'],
+    documentation   => 'Package',
+    lazy_build      => 1,
 );
 
 sub _build_Package {

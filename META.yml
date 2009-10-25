@@ -21,14 +21,16 @@ no_index:
     - xt
 requires:
   Crypt::SSLeay: 0
-  DateTime: 0
+  DateTime: 0.44
   Exception::Class: 0
   LWP::UserAgent: 0
   Moose: 0
+  MooseX::Getopt: 0
+  Path::Class: 0
+  Text::SimpleTable: 0
   XML::LibXML: 0
-  overload: 0
   perl: 5.10.0
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/maros/Business-UPS-Tracking.git
-version: 1.010
+version: 1.030

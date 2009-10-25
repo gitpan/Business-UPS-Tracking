@@ -1,14 +1,19 @@
-# ================================================================
+# ============================================================================
 package Business::UPS::Tracking::Utils;
-# ================================================================
+# ============================================================================
 use utf8;
-use Moose;
 use 5.0100;
 
+use metaclass (
+    metaclass   => "Moose::Meta::Class",
+    error_class => "Business::UPS::Tracking::Exception",
+);
+use Moose;
+
+use Moose::Util::TypeConstraints;
 use Business::UPS::Tracking;
-use Business::UPS::Tracking::Element::Address;
-use Business::UPS::Tracking::Element::Weight;
-use Business::UPS::Tracking::Element::ReferenceNumber;
+use MooseX::Getopt::OptionTypeMap;
+use Business::UPS::Tracking::Meta::Attribute::Trait::Serializable;
 
 our $VERSION = $Business::UPS::Tracking::VERISON;
 
@@ -32,16 +37,17 @@ coercions as well as the exception classes.
 
 =cut
 
-use Moose::Util::TypeConstraints;
+
 
 subtype 'XMLDocument' => as class_type('XML::LibXML::Document');
 
 coerce 'XMLDocument' 
     => from 'Str' 
     => via {
+        my $xml = $_;
         my $parser = XML::LibXML->new();
         my $doc = eval {
-            $parser->parse_string($_);
+            $parser->parse_string($xml);
         };
         if (! $doc) {
             Business::UPS::Tracking::X::XML->throw($@ || 'Unknown error parsing xml document');
@@ -70,33 +76,40 @@ coerce 'DateStr'
 
 subtype 'TrackingNumber'
     => as 'Str'
-    => where { m/^1Z.+$/ }
-    => message { "Tracking numbers must start with '1Z'" };
+    => where { 
+        my $trackingnumber = $_;
+        return 0 
+            unless ($trackingnumber =~ m/^1Z(?<tracking>[A-Z0-9]{8}\d{7})(?<checksum>\d)$/); 
+        # Checksum check fails because UPS testdata has invalid checksum!
+        return 1    
+            unless $Business::UPS::Tracking::CHECKSUM;
+        my $checksum = $+{checksum};
+        my $tracking = $+{tracking}; 
+        $tracking =~ tr/ABCDEFGHIJKLMNOPQRSTUVWXYZ/23456789012345678901234567/;
+        my ($odd,$even,$pos) = (0,0,0);
+        foreach (split //,$tracking) {
+            $pos ++;
+            if ($pos % 2) {
+                $odd += $_;
+            } else {
+                $even += $_;
+            }
+        }
+        $even *= 2;
+        my $calculated = $odd + $even;
+        $calculated =~ s/^\d+(\d)$/$1/e;
+        $calculated = 10 - $calculated
+            unless ($calculated == 0);
+        return ($checksum == $calculated);
+    }
+    => message { "Tracking numbers must start withn '1Z', contain 14 additional characters and end with a valid checksum" };
 
 subtype 'CountryCode'
     => as 'Str'
     => where { m/^[A-Z]{2}$/ }
     => message { "Must be an uppercase ISO 3166-1 alpha-2 code" };
 
-use Exception::Class( 
-    'Business::UPS::Tracking::X'    => {
-        description   => 'Basic error'
-    },
-    'Business::UPS::Tracking::X::HTTP' => {
-        isa           => 'Business::UPS::Tracking::X',    
-        description   => 'HTTP error',
-        fields        => ['http_response','request']
-    },
-    'Business::UPS::Tracking::X::UPS'  => {
-        isa           => 'Business::UPS::Tracking::X',    
-        description   => 'UPS error',
-        fields        => ['code','severity','request','context']
-    },
-    'Business::UPS::Tracking::X::XML'  => {
-        isa           => 'Business::UPS::Tracking::X',    
-        description   => 'Malformed response xml',
-    },
-);
+
 
 =head3 parse_date
 
@@ -167,71 +180,6 @@ sub parse_time {
     return $datetime;
 }
 
-=head3 build_address
-
- my $address = build_address($libxml_node,$xpath_expression);
-
-Turns an address xml node into a L<Business::UPS::Tracking::Element::Address> 
-object.
-
-=cut
-
-sub build_address {
-    my ($xml,$xpath) = @_;
-    
-    my $node = $xml->findnodes($xpath)->get_node(1);
-    
-    return 
-        unless $node && ref $node;
-        
-    return Business::UPS::Tracking::Element::Address->new(
-        xml => $node,
-    );
-}
-
-=head3 build_weight
-
- my $weight = build_weight($libxml_node,$xpath_expression);
-
-Turns an weight xml node into a L<Business::UPS::Tracking::Element::Weight> 
-object.
-
-=cut
-
-sub build_weight {
-    my ($xml,$xpath) = @_;
-    
-    my $node = $xml->findnodes($xpath)->get_node(1);
-    
-    return 
-        unless $node && ref $node;
-        
-    return Business::UPS::Tracking::Element::Weight->new(
-        xml => $node,
-    );
-}
-
-=head3 build_referencenumber
-
- my $weight = build_referencenumber($libxml_node,$xpath_expression);
-
-Turns an weight xml node into a 
-L<Business::UPS::Tracking::Element::ReferenceNumber> object.
-
-=cut
-
-sub build_referencenumber {
-    my ($xml,$xpath) = @_;
-    
-    my $node = $xml->findnodes($xpath)->get_node(1);
-    
-    return 
-        unless $node && ref $node;
-        
-    return Business::UPS::Tracking::Element::ReferenceNumber->new(
-        xml => $node,
-    );
-}
 
 =head3 escape_xml
 
@@ -252,5 +200,7 @@ sub escape_xml {
     
     return $string;
 }
+
+__PACKAGE__->meta->make_immutable;
 
 1;

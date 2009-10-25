@@ -1,9 +1,14 @@
-# ================================================================
+# ============================================================================
 package Business::UPS::Tracking::Response;
-# ================================================================
+# ============================================================================
 use utf8;
-use Moose;
 use 5.0100;
+
+use metaclass (
+    metaclass   => "Moose::Meta::Class",
+    error_class => "Business::UPS::Tracking::Exception",
+);
+use Moose;
 
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Shipment::Freight;
@@ -78,8 +83,7 @@ has 'shipment' => (
 has 'CustomerContext' => (
     is       => 'ro',
     isa      => 'Str',
-    lazy     => 1,
-    builder  => '_build_CustomerContext',
+    lazy_build   => 1,
 );
 
 sub BUILD {

@@ -1,9 +1,14 @@
-# ================================================================
+# ============================================================================
 package Business::UPS::Tracking::Element::Address;
-# ================================================================
+# ============================================================================
 use utf8;
-use Moose;
 use 5.0100;
+
+use metaclass (
+    metaclass   => "Moose::Meta::Class",
+    error_class => "Business::UPS::Tracking::Exception",
+);
+use Moose;
 
 use Business::UPS::Tracking::Utils;
 
@@ -43,12 +48,6 @@ Only US and Canada
 =head2 CountryCode
 
 ISO 3166-1 alpha-2 country code.
-
-=head1 METHODS
-
-=head2 meta
-
-Moose meta method
 
 =cut
 
@@ -93,11 +92,46 @@ sub _build_address {
     foreach my $node ( @{ $xml->childNodes } ) {
         my $name  = $node->nodeName;
         my $value = $node->textContent;
+        next unless $self->can($name);
         next unless defined $value;
         $self->$name($value);
     }
 
     return;
+}
+
+=head1 METHODS
+
+=head2 serialize 
+
+Serialize address into a string.
+
+=head2 meta
+
+Moose meta method
+
+=cut
+
+sub serialize {
+    my ($self) = @_;
+    
+    my @address;
+    push (@address,$self->AddressLine1)
+        if $self->AddressLine1;
+    push (@address,$self->AddressLine2)
+        if $self->AddressLine2;
+    push (@address,$self->AddressLine3)
+        if $self->AddressLine3;
+    
+    my $line = $self->CountryCode;
+    $line .= '-'.$self->PostalCode
+        if $self->PostalCode;
+    $line .= ' '.$self->City
+        if $self->City;
+        
+    push (@address,$line);
+    
+    return join("\n",@address);
 }
 
 =head1 METHODS
