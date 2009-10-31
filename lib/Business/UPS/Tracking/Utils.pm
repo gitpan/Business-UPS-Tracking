@@ -4,16 +4,14 @@ package Business::UPS::Tracking::Utils;
 use utf8;
 use 5.0100;
 
-use metaclass (
-    metaclass   => "Moose::Meta::Class",
-    error_class => "Business::UPS::Tracking::Exception",
-);
-use Moose;
+use strict;
+use warnings;
 
 use Moose::Util::TypeConstraints;
 use Business::UPS::Tracking;
 use MooseX::Getopt::OptionTypeMap;
 use Business::UPS::Tracking::Meta::Attribute::Trait::Serializable;
+use Encode;
 
 our $VERSION = $Business::UPS::Tracking::VERISON;
 
@@ -31,13 +29,11 @@ Business::UPS::Tracking::Utils - Utility functions
 
 This module provides some basic utility functions for 
 L<Business::UPS::Tracking> and defines some Moose type constraints and 
-coercions as well as the exception classes.
+coercions.
  
 =head1 FUNCTIONS
 
 =cut
-
-
 
 subtype 'XMLDocument' => as class_type('XML::LibXML::Document');
 
@@ -45,12 +41,19 @@ coerce 'XMLDocument'
     => from 'Str' 
     => via {
         my $xml = $_;
-        my $parser = XML::LibXML->new();
+        $xml = decode("iso-8859-1", $xml);
+        
+        my $parser = XML::LibXML->new(
+            #encoding    => 'iso-8859-15'
+        );
         my $doc = eval {
             $parser->parse_string($xml);
         };
         if (! $doc) {
-            Business::UPS::Tracking::X::XML->throw($@ || 'Unknown error parsing xml document');
+            Business::UPS::Tracking::X::XML->throw(
+                error   => $@ || 'Unknown error parsing xml document',
+                xml     => $xml,
+            );
         }
         return $doc;
     };
@@ -109,8 +112,6 @@ subtype 'CountryCode'
     => where { m/^[A-Z]{2}$/ }
     => message { "Must be an uppercase ISO 3166-1 alpha-2 code" };
 
-
-
 =head3 parse_date
 
  $datetime = parse_date($string);
@@ -139,7 +140,10 @@ sub parse_date {
         );
     };
     if (! $date || $@) {
-        Business::UPS::Tracking::X::XML->throw("Invalid date string '$datestr' : $@");
+        Business::UPS::Tracking::X::XML->throw(
+            error   => "Invalid date string: $@",
+            xml     => $datestr,
+        );
     }
     return $date;
 }
@@ -174,7 +178,10 @@ sub parse_time {
         return 1;
     };
     if (! $success || $@) {
-        Business::UPS::Tracking::X::XML->throw("Invalid time string '$timestr' : $@");
+        Business::UPS::Tracking::X::XML->throw(
+            error   => "Invalid time string: $@",
+            xml     => $timestr,
+        );
     }
 
     return $datetime;
@@ -200,7 +207,5 @@ sub escape_xml {
     
     return $string;
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;

@@ -16,7 +16,7 @@ use Business::UPS::Tracking::Request;
 
 use version;
 
-our $VERSION = version->new('1.03');
+our $VERSION = version->new('1.04');
 our $AUTHORITY = 'cpan:MAROS';
 our $CHECKSUM = 1;
 
@@ -157,7 +157,18 @@ XML parser or schema error.
 =head3 Business::UPS::Tracking::X::CLASS
 
 Error originating from the wrong usage of a method/accessor/class. Most
-commonly this will be thrown because of a failing type constraint.
+commonly this will be thrown because of a failing type constraint. 
+
+=over
+
+=item * method 
+=item * depth 
+=item * evaltext 
+=item * sub_name 
+=item * last_error 
+=item * sub 
+=item * is_require 
+=item * has_args
 
 =back
 
@@ -357,4 +368,4 @@ implementation.
 
 =cut
 
-'https://wwwcie.ups.com/ups.app/xml/Track';
+'Where is my "30 HP NorTrac Bulldozer" I ordered at Amazon recently? (http://www.amazon.com/30-HP-NorTrac-Bulldozer-Backhoe/dp/B000EIWSN0)';

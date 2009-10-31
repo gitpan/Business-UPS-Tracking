@@ -120,6 +120,9 @@ DESCRIPTION
     Error originating from the wrong usage of a method/accessor/class. Most
     commonly this will be thrown because of a failing type constraint.
 
+    *   method =item * depth =item * evaltext =item * sub_name =item *
+        last_error =item * sub =item * is_require =item * has_args
+
   Accessor / method naming
     The naming of the methods and accessors tries to stick close to the
     names used by the UPS webservice. All accessors containg uppercase
@@ -213,11 +216,4 @@ SEE ALSO
 
     The WebService::UPS::TrackRequest provides an alternative simpler
     implementation.
-
-POD ERRORS
-    Hey! The above document had some coding errors, which are explained
-    below:
-
-    Around line 162:
-        =back without =over
 
