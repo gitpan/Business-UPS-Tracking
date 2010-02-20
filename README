@@ -165,6 +165,20 @@ ACCESSORS
   Password
     UPS account password
 
+  config
+    Optionally you can retrieve all or some UPS webservice credentials from
+    a configuration file. This accessor holds the path to this file.
+    Defaults to "~/.ups_tracking"
+
+    Example configuration file:
+
+     <?xml version="1.0"?>
+     <UPS_tracing_webservice_config>
+        <AccessLicenseNumber>1CFFED5A5E91B17</AccessLicenseNumber>
+        <UserId>myupsuser</UserId>
+        <Password>secret</Password>
+     </UPS_tracing_webservice_config>
+
   retry_http
     Number of retries if http errors occur
 
