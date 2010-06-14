@@ -4,12 +4,9 @@ package Business::UPS::Tracking;
 use utf8;
 use 5.0100;
 
-use metaclass (
-    metaclass   => "Moose::Meta::Class",
-    error_class => "Business::UPS::Tracking::Exception",
-);
 use Moose;
 with qw(Business::UPS::Tracking::Role::Base);
+__PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 
 use LWP::UserAgent;
 use Business::UPS::Tracking::Utils;
@@ -17,7 +14,7 @@ use Business::UPS::Tracking::Request;
 
 use version;
 
-our $VERSION = version->new('1.05');
+our $VERSION = version->new('1.06');
 our $AUTHORITY = 'cpan:MAROS';
 our $CHECKSUM = 1;
 
@@ -113,8 +110,8 @@ Business::UPS::Tracking - Interface to the UPS tracking webservice
 =head2 Exception Handling
 
 If anythis goes wrong Business::UPS::Tracking throws an exception. Exceptions 
-are allways L<Exception::Class> object which contain stuctured information
-about the error. Please refer to the synopsis or L<Exception::Class> 
+are always L<Exception::Class> objects which contain structured information
+about the error. Please refer to the synopsis or to the L<Exception::Class> 
 documentation for documentation how to catch and rethrow exeptions.
 
 The following exception classes are defined:
