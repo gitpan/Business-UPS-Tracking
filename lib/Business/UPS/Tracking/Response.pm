@@ -68,7 +68,7 @@ has 'xml' => (
     is       => 'ro',
     required => 1,
     coerce   => 1,
-    isa      => 'XMLDocument',
+    isa      => 'Business::UPS::Tracking::Type::XMLDocument',
 );
 has 'shipment' => (
     is       => 'rw',
@@ -173,5 +173,5 @@ sub _build_CustomerContext {
 #}
 
 __PACKAGE__->meta->make_immutable;
-
+no Moose;
 1;

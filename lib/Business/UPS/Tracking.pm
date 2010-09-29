@@ -8,13 +8,14 @@ use Moose;
 with qw(Business::UPS::Tracking::Role::Base);
 __PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 
+use Business::UPS::Tracking::Exception;
 use LWP::UserAgent;
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Request;
 
 use version;
 
-our $VERSION = version->new('1.06');
+our $VERSION = version->new('1.07');
 our $AUTHORITY = 'cpan:MAROS';
 our $CHECKSUM = 1;
 
@@ -160,12 +161,19 @@ commonly this will be thrown because of a failing type constraint.
 =over
 
 =item * method 
+
 =item * depth 
+
 =item * evaltext 
+
 =item * sub_name 
+
 =item * last_error 
+
 =item * sub 
+
 =item * is_require 
+
 =item * has_args
 
 =back
@@ -320,6 +328,7 @@ sub request_run {
 }
 
 __PACKAGE__->meta->make_immutable;
+no Moose;
 
 =head1 SUPPORT
 

@@ -4,11 +4,8 @@ package Business::UPS::Tracking::Element::Code;
 use utf8;
 use 5.0100;
 
-use metaclass (
-    metaclass   => "Moose::Meta::Class",
-    error_class => "Business::UPS::Tracking::Exception",
-);
 use Moose;
+__PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 
 use Business::UPS::Tracking::Utils;
 
@@ -93,5 +90,5 @@ Moose meta method
 =cut
 
 __PACKAGE__->meta->make_immutable;
-
+no Moose;
 1;

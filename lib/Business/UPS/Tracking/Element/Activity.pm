@@ -110,7 +110,7 @@ has 'StatusType' => (
 );
 has 'DateTime' => (
     is      => 'ro',
-    isa     => 'Maybe[Date]',
+    isa     => 'Maybe[Business::UPS::Tracking::Type::Date]',
     traits  => ['Serializable'],
     lazy_build      => 1,
     documentation   => 'Date/time',
@@ -211,7 +211,6 @@ Moose meta method
 
 =cut
 
-
 __PACKAGE__->meta->make_immutable;
-
+no Moose;
 1;
