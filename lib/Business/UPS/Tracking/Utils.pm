@@ -11,10 +11,10 @@ use Business::UPS::Tracking::Exception;
 use Moose::Util::TypeConstraints;
 use Business::UPS::Tracking;
 use MooseX::Getopt::OptionTypeMap;
-use Business::UPS::Tracking::Meta::Attribute::Trait::Serializable;
+use Business::UPS::Tracking::Meta::Attribute::Trait::Printable;
 use Encode;
 
-our $VERSION = $Business::UPS::Tracking::VERISON;
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 
@@ -86,7 +86,7 @@ subtype 'Business::UPS::Tracking::Type::TrackingNumber'
         return 0 
             unless ($trackingnumber =~ m/^1Z(?<tracking>[A-Z0-9]{8}\d{7})(?<checksum>\d)$/); 
         # Checksum check fails because UPS testdata has invalid checksum!
-        return 1    
+        return 1
             unless $Business::UPS::Tracking::CHECKSUM;
         my $checksum = $+{checksum};
         my $tracking = $+{tracking}; 
@@ -107,7 +107,7 @@ subtype 'Business::UPS::Tracking::Type::TrackingNumber'
             unless ($calculated == 0);
         return ($checksum == $calculated);
     }
-    => message { "Tracking numbers must start withn '1Z', contain 14 additional characters and end with a valid checksum" };
+    => message { "Tracking numbers must start withn '1Z', contain 15 additional characters and end with a valid checksum : '$_'" };
 
 subtype 'Business::UPS::Tracking::Type::CountryCode'
     => as 'Str'

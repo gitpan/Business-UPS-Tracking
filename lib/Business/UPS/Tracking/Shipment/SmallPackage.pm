@@ -10,7 +10,7 @@ __PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 
 use Business::UPS::Tracking::Element::Package;
 
-our $VERSION = $Business::UPS::Tracking::VERISON;
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 
@@ -38,7 +38,7 @@ List of packages (L<Business::UPS::Tracking::Element::Package>)
 has 'Package' => (
     is      => 'ro',
     isa     => 'ArrayRef[Business::UPS::Tracking::Element::Package]',
-    traits  => ['Serializable'],
+    traits  => ['Printable'],
     documentation   => 'Package',
     lazy_build      => 1,
 );

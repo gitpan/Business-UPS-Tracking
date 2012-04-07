@@ -9,7 +9,7 @@ __PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 
 use Business::UPS::Tracking::Utils;
 
-our $VERSION = $Business::UPS::Tracking::VERISON;
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 
@@ -79,7 +79,7 @@ sub serialize {
 
 =head1 METHODS
 
-=head2 serialize 
+=head2 printall 
 
 Returns the serialized object content
 

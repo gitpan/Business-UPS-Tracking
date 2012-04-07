@@ -10,7 +10,7 @@ with qw(MooseX::Getopt Business::UPS::Tracking::Role::Base);
 
 __PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 
-our $VERSION = $Business::UPS::Tracking::VERISON;
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 
@@ -60,13 +60,11 @@ Defaults to C<~/.ups_tracking>
 Example configuration file:
 
  <?xml version="1.0"?>
- <UPS_tracing_webservice_config>
+ <UPS_tracking_webservice_config>
     <AccessLicenseNumber>1CFFED5A5E91B17</AccessLicenseNumber>
     <UserId>myupsuser</UserId>
     <Password>secret</Password>
- </UPS_tracing_webservice_config>
- 
-=cut
+ </UPS_tracking_webservice_config>
 
 =head1 METHODS
 
@@ -109,7 +107,7 @@ sub execute {
     foreach my $shipment (@{$response->shipment}) {
         say ".============================================================================.";
         say "| Shipment $count                                                                 |";
-        say $shipment->serialize->draw;
+        say $shipment->printall->draw;
         say "";
         if ($self->verbose) {
             say $shipment->xml->toString(1);

@@ -13,11 +13,9 @@ use LWP::UserAgent;
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Request;
 
-use version;
-
-our $VERSION = version->new('1.07');
+our $VERSION = "1.09";
 our $AUTHORITY = 'cpan:MAROS';
-our $CHECKSUM = 1;
+our $CHECKSUM = $ENV{TRACKING_CHECKSUM} // 1 ;
 
 =encoding utf8
 
@@ -240,11 +238,11 @@ Defaults to C<~/.ups_tracking>
 Example configuration file:
 
  <?xml version="1.0"?>
- <UPS_tracing_webservice_config>
+ <UPS_tracking_webservice_config>
     <AccessLicenseNumber>1CFFED5A5E91B17</AccessLicenseNumber>
     <UserId>myupsuser</UserId>
     <Password>secret</Password>
- </UPS_tracing_webservice_config>
+ </UPS_tracking_webservice_config>
 
 =head2 retry_http
 
@@ -270,11 +268,11 @@ has 'retry_http' => (
     is          => 'rw',
     isa         => 'Int',
     default     => 0,
-    documentation   => 'Number of retries if HTTP erros occur [Default 0]',
+    documentation   => 'Number of retries if HTTP errors occur [Default 0]',
 );
 has 'url' => (
     is          => 'rw',
-    default     => 'https://wwwcie.ups.com/ups.app/xml/Track',
+    default     => sub { 'https://wwwcie.ups.com/ups.app/xml/Track' },
     documentation   => 'UPS webservice url',
 );
 has '_ua' => (
@@ -289,7 +287,7 @@ sub _build_ua {
     my ($self) = @_;
 
     my $ua = LWP::UserAgent->new(
-        agent       => "__PACKAGE__ $VERSION",
+        agent       => __PACKAGE__ . " ". $VERSION,
         timeout     => 50,
         env_proxy   => 1,
     );
@@ -338,29 +336,6 @@ L<http://rt.cpan.org/Public/Bug/Report.html?Queue=Business::UPS::Tracking>.
 I will be notified, and then you'll automatically be notified of progress on 
 your report as I make changes.
 
-=head1 AUTHOR
-
-    Maroš Kollár
-    CPAN ID: MAROS
-    maros [at] k-1.com
-    http://www.k-1.com
-
-=head1 ACKNOWLEDGEMENTS 
-
-This module was written for Revdev L<http://www.revdev.at>, a nice litte 
-software company I run with Koki and Domm (L<http://search.cpan.org/~domm/>).
-
-
-=head1 COPYRIGHT
-
-Business::UPS::Tracking is Copyright (c) 2009 Maroš Kollár.
-
-This program is free software; you can redistribute it and/or modify it under 
-the same terms as Perl itself.
-
-The full text of the license can be found in the LICENSE file included with 
-this module.
-
 =head1 SEE ALSO
 
 Download the UPS "OnLine® Tools Tracking Developer Guide" and get a
@@ -370,6 +345,24 @@ various fields.
 
 The L<WebService::UPS::TrackRequest> provides an alternative simpler 
 implementation.
+
+=head1 AUTHOR
+
+    Maroš Kollár
+    CPAN ID: MAROS
+    maros [at] k-1.com
+    
+    http://www.k-1.com
+
+=head1 COPYRIGHT
+
+Business::UPS::Tracking is Copyright (c) 2012 Maroš Kollár 
+- L<http://www.k-1.com>
+
+=head1 LICENCE
+
+This library is free software, you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 =cut
 

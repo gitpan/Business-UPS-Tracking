@@ -5,14 +5,14 @@ use utf8;
 use 5.0100;
 
 use Moose;
-with qw(Business::UPS::Tracking::Role::Serialize
+with qw(Business::UPS::Tracking::Role::Print
     Business::UPS::Tracking::Role::Builder);
 __PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Element::Activity;
 
-our $VERSION = $Business::UPS::Tracking::VERISON;
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 
@@ -65,20 +65,20 @@ has 'xml' => (
 has 'ActivityLocationAddress' => (
     is      => 'ro',
     isa     => 'Maybe[Business::UPS::Tracking::Element::Address]',
-    traits  => ['Serializable'],
+    traits  => ['Printable'],
     documentation   => 'Address',
     lazy_build      => 1,
 );
 has 'ActivityLocation' => (
     is      => 'ro',
     isa     => 'Maybe[Business::UPS::Tracking::Element::Code]',
-    traits  => ['Serializable'],
+    traits  => ['Printable'],
     lazy_build      => 1,
 );
 has 'SignedForByName' => (
     is      => 'ro',
     isa     => 'Maybe[Str]',
-    traits  => ['Serializable'],
+    traits  => ['Printable'],
     lazy_build      => 1,
     documentation   => 'Signed by',
 );
@@ -86,7 +86,7 @@ has 'StatusCode' => (
     is      => 'ro',
     isa     => 'Maybe[Str]',
     lazy_build      => 1,
-    traits  => ['Serializable'],
+    traits  => ['Printable'],
     documentation   => 'Satus code',
 );
 # MP ... Billing information
@@ -104,14 +104,14 @@ has 'StatusCode' => (
 has 'StatusType' => (
     is      => 'ro',
     isa     => 'Maybe[Business::UPS::Tracking::Element::Code]',
-    traits  => ['Serializable'],
+    traits  => ['Printable'],
     lazy_build      => 1,
     documentation   => 'Status',
 );
 has 'DateTime' => (
     is      => 'ro',
     isa     => 'Maybe[Business::UPS::Tracking::Type::Date]',
-    traits  => ['Serializable'],
+    traits  => ['Printable'],
     lazy_build      => 1,
     documentation   => 'Date/time',
 );

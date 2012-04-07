@@ -5,13 +5,14 @@ use utf8;
 use 5.0100;
 
 use Moose::Role;
-use strict; # Make cpants happy
 #requires('xml');
 
 use Business::UPS::Tracking::Element::Address;
 use Business::UPS::Tracking::Element::Weight;
 use Business::UPS::Tracking::Element::ReferenceNumber;
 use Business::UPS::Tracking::Element::Code;
+
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 

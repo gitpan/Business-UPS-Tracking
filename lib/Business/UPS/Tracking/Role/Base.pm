@@ -5,9 +5,8 @@ use utf8;
 use 5.0100;
 
 use Moose::Role;
-use strict; # Make cpants happy
 
-our $VERSION = $Business::UPS::Tracking::VERISON;
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 use Path::Class::File;
 

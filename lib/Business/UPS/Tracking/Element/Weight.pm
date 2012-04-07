@@ -10,7 +10,7 @@ __PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Element::Code;
 
-our $VERSION = $Business::UPS::Tracking::VERISON;
+our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 
@@ -71,9 +71,15 @@ sub _build_weight {
     return;
 }
 
+sub serialize {
+    my ($self) = @_;
+    
+    $self->printall;
+}
+
 =head1 METHODS
 
-=head2 serialize
+=head2 printall
 
 Returns the weight as a string (eg. '14.5 KGS')
 
@@ -83,7 +89,7 @@ Moose meta method
 
 =cut
 
-sub serialize {
+sub printall {
     my ($self) = @_;
     return $self->Weight.' '.$self->UnitOfMeasurement->Code;
 }
