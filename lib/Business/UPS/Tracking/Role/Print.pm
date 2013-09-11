@@ -6,6 +6,8 @@ use 5.0100;
 
 use Moose::Role;
 
+no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
+
 use Text::SimpleTable;
 
 =encoding utf8
@@ -123,7 +125,8 @@ sub _print_value {
                 $table->row($name,$value);
             }
         }
-    }   
+    } 
+    return;  
 }
 
 no Moose::Role;

@@ -3,6 +3,7 @@ package Business::UPS::Tracking;
 # ============================================================================
 use utf8;
 use 5.0100;
+no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
 
 use Moose;
 with qw(Business::UPS::Tracking::Role::Base);
@@ -13,7 +14,7 @@ use LWP::UserAgent;
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Request;
 
-our $VERSION = "1.09";
+our $VERSION = "1.10";
 our $AUTHORITY = 'cpan:MAROS';
 our $CHECKSUM = $ENV{TRACKING_CHECKSUM} // 1 ;
 

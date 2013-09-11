@@ -4,9 +4,9 @@ package Business::UPS::Tracking::Exception;
 use utf8;
 use 5.0100;
 
-use base qw(Moose::Error::Default);
 use strict;
 use warnings;
+use parent qw(Moose::Error::Default);
 
 our $VERSION = $Business::UPS::Tracking::VERSION;
 
@@ -39,7 +39,7 @@ use Exception::Class(
 sub new {
     my ( $self, @args ) = @_;
     
-    $self->create_error_exception(@args)->throw;
+    return $self->create_error_exception(@args)->throw;
 }
 
 sub create_error_exception {
