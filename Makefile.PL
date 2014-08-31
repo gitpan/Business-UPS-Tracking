@@ -13,7 +13,7 @@ readme_from     $from;
 perl_version    '5.010';
 
 # Specific dependencies
-requires        'Moose'                 => '2.0301';
+requires        'Moose'                 => '2.0400';
 requires        'DateTime'              => '0.44';
 requires        'Exception::Class'      => 0;
 requires        'LWP::UserAgent'        => 0;
@@ -25,6 +25,7 @@ unless (can_use('Crypt::SSLeay') || can_use('IO::Socket::SSL')) {
     requires    'Crypt::SSLeay'         => 0;
 }
 requires        'XML::LibXML'           => 0;
+requires        'Try::Tiny'             => 0;
 
 build_requires  'Test::NoWarnings'      => 0;
 

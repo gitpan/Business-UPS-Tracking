@@ -3,18 +3,18 @@ package Business::UPS::Tracking;
 # ============================================================================
 use utf8;
 use 5.0100;
-no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
 
 use Moose;
 with qw(Business::UPS::Tracking::Role::Base);
-__PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
+
+no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
 
 use Business::UPS::Tracking::Exception;
 use LWP::UserAgent;
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Request;
 
-our $VERSION = "1.10";
+our $VERSION = "1.11";
 our $AUTHORITY = 'cpan:MAROS';
 our $CHECKSUM = $ENV{TRACKING_CHECKSUM} // 1 ;
 
@@ -151,11 +151,6 @@ UPS error message.The object provides additional parameters:
 =head3 Business::UPS::Tracking::X::XML
 
 XML parser or schema error.
-
-=head3 Business::UPS::Tracking::X::CLASS
-
-Error originating from the wrong usage of a method/accessor/class. Most
-commonly this will be thrown because of a failing type constraint. 
 
 =over
 

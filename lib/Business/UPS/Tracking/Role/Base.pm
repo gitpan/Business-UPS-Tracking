@@ -3,12 +3,12 @@ package Business::UPS::Tracking::Role::Base;
 # ============================================================================
 use utf8;
 use 5.0100;
-no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
 
 use Moose::Role;
 
-our $VERSION = $Business::UPS::Tracking::VERSION;
+no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
 
+use Try::Tiny;
 use Path::Class::File;
 
 =encoding utf8
@@ -128,7 +128,7 @@ sub _build_config {
     
     my $parser = XML::LibXML->new();
     
-    my $return = eval {
+    try {
         my $document = $parser->parse_file( $self->config );
         my $root = $document->documentElement();
         
@@ -141,12 +141,10 @@ sub _build_config {
             $self->$method($param->textContent); 
         }
         return 1;
+    } catch {
+        my $e = $_ || 'Unknwon error';
+        Business::UPS::Tracking::X->throw('Could not open/parse UPS tracking webservice access config file at '.$self->config.' : '.$e);
     };
-    
-    if (! $return || $@) {
-        my $errormessage = $@ || 'Unknwon error';
-        Business::UPS::Tracking::X->throw('Could not open/parse UPS tracking webservice access config file at '.$self->config.' : '.$errormessage);
-    }
     
     unless ($self->_has_AccessLicenseNumber 
         && $self->_has_UserId

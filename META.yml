@@ -9,7 +9,7 @@ configure_requires:
   ExtUtils::MakeMaker: 6.59
 distribution_type: module
 dynamic_config: 1
-generated_by: 'Module::Install version 1.06'
+generated_by: 'Module::Install version 1.10'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -25,13 +25,14 @@ requires:
   Encode: 0
   Exception::Class: 0
   LWP::UserAgent: 0
-  Moose: 2.0301
+  Moose: 2.0400
   MooseX::Getopt: 0.30
   Path::Class: 0
   Text::SimpleTable: 0
+  Try::Tiny: 0
   XML::LibXML: 0
   perl: 5.10.0
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/maros/Business-UPS-Tracking.git
-version: 1.10
+version: 1.11

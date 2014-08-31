@@ -3,10 +3,10 @@ package Business::UPS::Tracking::Response;
 # ============================================================================
 use utf8;
 use 5.0100;
-no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
 
 use Moose;
-__PACKAGE__->meta->error_class("Business::UPS::Tracking::Exception");
+
+no if $] >= 5.017004, warnings => qw(experimental::smartmatch);
 
 use Business::UPS::Tracking::Utils;
 use Business::UPS::Tracking::Shipment::Freight;
@@ -14,8 +14,6 @@ use Business::UPS::Tracking::Shipment::SmallPackage;
 
 use XML::LibXML;
 use DateTime;
-
-our $VERSION = $Business::UPS::Tracking::VERSION;
 
 =encoding utf8
 
